@@ -4,10 +4,15 @@ var colm, colmimg;
 var pull, pullimg, slide, slideimg;
 var countdown = 3;
 var gameState = "wait";
+var slider, holster, holsterimg, pistol, pistolimg;
+var mouse;
+var flag = 0;
+
 
 function preload() {
-  bgimg = loadImage("Picture1.webp");
-
+  bgimg = loadImage("Background.jpg");
+  holsterimg = loadImage("holster.png");
+  pistolimg = loadImage("Pistol.png")
 }
 
 
@@ -15,19 +20,28 @@ function setup() {
   createCanvas(1450,720);
   bg = createSprite(725, 360);
   bg.addImage(bgimg);
-  bg.scale = 2.0;
+  bg.scale = 1.8;
   
+
+
+
   //player
-  sean = createSprite(250, 300, 500, 1000);
-  sean.shapeColor = "green";
+  sean = createSprite(300, 350, 500, 1000);
+  //sean.shapeColor = "green";
+  sean.addImage("holster", holsterimg);
+  sean.addImage("pistol", pistolimg);
   //Ai
-  colm = createSprite(1200, 300, 70, 600);
+  colm = createSprite(1200, 400, 80, 530);
   colm.shapeColor = "black";
 
   //slider & draw
   slider = createSprite(1400, 550, 50, 320);
   pull = createSprite(1400, 685, 70, 70);
   pull.shapeColor = "white";
+
+  //mouse
+mouse = createSprite(500, 500, 10, 10);
+mouse.shapeColor = "grey";
 }
 
 setTimeout(()=> {
@@ -38,6 +52,7 @@ setTimeout(()=> {
 setTimeout(()=> {
   countdown -= 1;
   gameState = "play";
+  
 },5000);
 
 
@@ -48,17 +63,10 @@ function draw() {
   }  
 
  
-  
-//Controls
-  if(keyIsDown(RIGHT_ARROW)) {
-    bg.x -= 3;
-    colm.x -=3;
-  }
+  //mouse
+  mouse.x = mouseX;
+  mouse.y = mouseY;
 
-  if(keyIsDown(LEFT_ARROW)) {
-    bg.x += 3;
-    colm.x +=3;
-  }
 
   //slider
   if(mousePressedOver(pull) && pull.y >= 400 && gameState === "play"){
@@ -66,7 +74,9 @@ function draw() {
     console.log(pull.y)
   }
 
-
+if(pull.y <= 400){
+  sean.changeImage("pistol")
+};
   drawSprites();
 
   textSize(30);
@@ -88,6 +98,30 @@ function draw() {
     strokeWeight(2);
     stroke("red");
     text("Fire!", width/2 - 100, 120);
+    setTimeout(()=>{
+      textSize(80);
+    strokeWeight(2);
+    stroke("red");
+    if(flag === 0){
+      text("Game Over", width/2 - 220, 250);
+    }
+      
+      
+    }, 3000);
+  }
+
+  if(gameState === "play" && pull.y <= 400){
+
+    if(mousePressedOver(colm)){
+      
+      flag = 1
+    }
+    if(flag === 1){
+      textSize(110);
+      strokeWeight(2);
+      stroke("Purple");
+        text("You Win", width/2 - 220, 250);
+    }
   }
 
 }
