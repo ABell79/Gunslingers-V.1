@@ -7,12 +7,15 @@ var gameState = "wait";
 var slider, holster, holsterimg, pistol, pistolimg;
 var mouse;
 var flag = 0;
+var gun, bgso;
 
 
 function preload() {
   bgimg = loadImage("Background.jpg");
   holsterimg = loadImage("holster.png");
   pistolimg = loadImage("Pistol.png")
+  gun = loadSound("G.mp3");
+  bgso = loadSound("theme.mp3");
 }
 
 
@@ -22,8 +25,9 @@ function setup() {
   bg.addImage(bgimg);
   bg.scale = 1.8;
   
-
-
+  bgso.play();
+  //bgso.loop();
+  //bgso.setVolume(1);
 
   //player
   sean = createSprite(300, 350, 500, 1000);
@@ -113,7 +117,8 @@ if(pull.y <= 400){
   if(gameState === "play" && pull.y <= 400){
 
     if(mousePressedOver(colm)){
-      
+      gun.play();
+
       flag = 1
     }
     if(flag === 1){
